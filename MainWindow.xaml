@@ -10,9 +10,12 @@
 		<Style TargetType="ProgressBar">
 			<Setter Property="Orientation" Value="Vertical"></Setter>
 			<Setter Property="Foreground" Value="BlueViolet"></Setter>
+			<Setter Property="Maximum" Value="1"></Setter>
+			<Setter Property="HorizontalAlignment" Value="Center"></Setter>
+			<Setter Property="Width" Value="200"></Setter>
 		</Style>
 	</Window.Resources>
-    <Grid>
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="5*"></RowDefinition>
 			<RowDefinition Height="25px"></RowDefinition>
@@ -32,19 +35,34 @@
 			<ColumnDefinition Width="*"></ColumnDefinition>
 			<ColumnDefinition Width="*"></ColumnDefinition>
 			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
-		<ProgressBar Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="5" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="6" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="7" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="8" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="9" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="10" HorizontalAlignment="Center" Width="200px"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="11" HorizontalAlignment="Center" Width="200px"></ProgressBar>
+		
+		<ProgressBar Grid.Row="0" Grid.Column="0" Name="roll2sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="1" Name="roll3sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="2" Name="roll4sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="3" Name="roll5sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="4" Name="roll6sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="5" Name="roll7sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="6" Name="roll8sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="7" Name="roll9sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="8" Name="roll10sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="9" Name="roll11sPB"></ProgressBar>
+		<ProgressBar Grid.Row="0" Grid.Column="10" Name="roll12sPB"></ProgressBar>
+		
+		<Label Grid.Row="1" Grid.ColumnSpan="12" Content="Roll value" HorizontalContentAlignment="Center"></Label>
+		
+		<Label Grid.Row="2" Grid.Column="0" Name="roll2sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="1" Name="roll3sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="2" Name="roll4sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="3" Name="roll5sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="4" Name="roll6sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="5" Name="roll7sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="6" Name="roll8sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="7" Name="roll9sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="8" Name="roll10sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="9" Name="roll11sLbl"></Label>
+		<Label Grid.Row="2" Grid.Column="10" Name="roll12sLbl"></Label>
+		
+		<Label Grid.Row="3" Grid.ColumnSpan="12" Content="Roll count" HorizontalContentAlignment="Center"></Label>
 	</Grid>
 </Window>
