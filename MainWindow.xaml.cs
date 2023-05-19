@@ -26,6 +26,133 @@ namespace CatanRollTracker
 		private ProgressBar[] progressBars = new ProgressBar[13];
 		private Label[] labels = new Label[13];
 
+		//Commands for keybindings
+		private ICommand rollCommand;
+
+		public ICommand Roll2Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						MessageBox.Show("command");
+						roll(2);
+					}));
+			}
+		}
+		public ICommand Roll3Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(3);
+					}));
+			}
+		}
+		public ICommand Roll4Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(4);
+					}));
+			}
+		}
+		public ICommand Roll5Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						MessageBox.Show("5");
+						roll(5);
+					}));
+			}
+		}
+		public ICommand Roll6Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(6);
+					}));
+			}
+		}
+		public ICommand Roll7Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(7);
+					}));
+			}
+		}
+		public ICommand Roll8Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(8);
+					}));
+			}
+		}
+		public ICommand Roll9Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(9);
+					}));
+			}
+		}
+		public ICommand Roll10Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(10);
+					}));
+			}
+		}
+		public ICommand Roll11Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(11);
+					}));
+			}
+		}
+		public ICommand Roll12Command
+		{
+			get
+			{
+				return rollCommand
+					?? (rollCommand = new ActionCommand(() =>
+					{
+						roll(12);
+					}));
+			}
+		}
+
 		public MainWindow()
 		{
 			for (int i = 0; i < rolls.Length; i++)
@@ -35,6 +162,7 @@ namespace CatanRollTracker
 
 			WindowState = WindowState.Maximized;
 			InitializeComponent();
+			DataContext = this;
 
 			progressBars[2] = roll2sPB;
 			progressBars[3] = roll3sPB;
@@ -67,8 +195,43 @@ namespace CatanRollTracker
 				Binding lblBinding = new Binding("Value");
 				lblBinding.Source = rolls[i];
 				labels[i].SetBinding(Label.ContentProperty, lblBinding);
+				progressBars[i].SetBinding(ProgressBar.ValueProperty, lblBinding);
 			}
 			//roll2sPB.SetBinding();
+		}
+
+		private int getMaxRollCount()
+		{
+			int maxRollCount = 0;
+
+			for(int i = 2; i < rolls.Length; i++)
+			{
+				if (rolls[i].Value > maxRollCount)
+				{
+					maxRollCount = rolls[i].Value;
+				}
+			}
+
+			return maxRollCount;
+		}
+
+		private void setPBMaximums(int max)
+		{
+			for (int i = 2; i < rolls.Length; i++)
+			{
+				progressBars[i].Maximum = max;
+			}
+		}
+
+		private void roll(int roll)
+		{
+			MessageBox.Show(roll.ToString());
+			int expectedRollCount = rolls[roll].Value + 1;
+			if(expectedRollCount > getMaxRollCount())
+			{
+				setPBMaximums(expectedRollCount);
+			}
+			rolls[roll].Value = roll;
 		}
 	}
 }
