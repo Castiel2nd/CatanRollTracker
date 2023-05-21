@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CatanRollTracker" d:DataContext="{d:DesignInstance Type=local:IntegerProperty}"
+        xmlns:local="clr-namespace:CatanRollTracker"
 		mc:Ignorable="d"
         Title="Catan Roll Tracker" Height="450" Width="800">
 	<Window.Resources>
@@ -21,80 +21,77 @@
 			<Setter Property="FontSize" Value="20"></Setter>
 		</Style>
 	</Window.Resources>
-	<Window.InputBindings>
-		<KeyBinding Command="{Binding Roll3Command}" Key="NumPad3"></KeyBinding>
-		<KeyBinding Command="{Binding Roll2Command}" Key="NumPad2"></KeyBinding>
-		
-		<KeyBinding Command="{Binding Roll4Command}" Key="NumPad4"></KeyBinding>
-		<KeyBinding Command="{Binding Roll5Command}" Key="NumPad5"></KeyBinding>
-		<KeyBinding Command="{Binding Roll6Command}" Key="NumPad6"></KeyBinding>
-		<KeyBinding Command="{Binding Roll7Command}" Key="NumPad7"></KeyBinding>
-		<KeyBinding Command="{Binding Roll8Command}" Key="NumPad8"></KeyBinding>
-		<KeyBinding Command="{Binding Roll9Command}" Key="NumPad9"></KeyBinding>
-		<KeyBinding Command="{Binding Roll10Command}" Key="I"></KeyBinding>
-		<KeyBinding Command="{Binding Roll11Command}" Key="O"></KeyBinding>
-		<KeyBinding Command="{Binding Roll12Command}" Key="P"></KeyBinding>
-	</Window.InputBindings>
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="5*"></RowDefinition>
-			<RowDefinition Height="25px"></RowDefinition>
-			<RowDefinition Height="*"></RowDefinition>
-			<RowDefinition Height="25px"></RowDefinition>
-			<RowDefinition Height="*"></RowDefinition>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-		</Grid.ColumnDefinitions>
-		
-		<ProgressBar Grid.Row="0" Grid.Column="0" Name="roll2sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="1" Name="roll3sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="2" Name="roll4sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="3" Name="roll5sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="4" Name="roll6sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="5" Name="roll7sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="6" Name="roll8sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="7" Name="roll9sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="8" Name="roll10sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="9" Name="roll11sPB"></ProgressBar>
-		<ProgressBar Grid.Row="0" Grid.Column="10" Name="roll12sPB"></ProgressBar>
-		
-		<Label Grid.Row="1" Grid.ColumnSpan="12" Content="Roll value" FontSize="12"></Label>
-		
-		<Label Grid.Row="2" Grid.Column="0" Content="2" FontSize="19"></Label>
-		<Label Grid.Row="2" Grid.Column="1" Content="3" FontSize="22"></Label>
-		<Label Grid.Row="2" Grid.Column="2" Content="4" FontSize="25"></Label>
-		<Label Grid.Row="2" Grid.Column="3" Content="5" FontSize="28"></Label>
-		<Label Grid.Row="2" Grid.Column="4" Content="6" FontSize="28" Foreground="Red"></Label>
-		<Label Grid.Row="2" Grid.Column="5" Content="7" FontSize="28" Foreground="Orange"></Label>
-		<Label Grid.Row="2" Grid.Column="6" Content="8" FontSize="28" Foreground="Red"></Label>
-		<Label Grid.Row="2" Grid.Column="7" Content="9" FontSize="28"></Label>
-		<Label Grid.Row="2" Grid.Column="8" Content="10" FontSize="25"></Label>
-		<Label Grid.Row="2" Grid.Column="9" Content="11" FontSize="22"></Label>
-		<Label Grid.Row="2" Grid.Column="10" Content="12" FontSize="19"></Label>
+	<DockPanel>
+		<Menu DockPanel.Dock="Top">
+			<MenuItem Header="File">
+				<MenuItem Header="Save" Click="SaveMenuItem_Click"></MenuItem>
+				<MenuItem Header="Save as" Click="SaveAsMenuItem_Click"></MenuItem>
+			</MenuItem>
+			<MenuItem Header="Settings">
+				<MenuItem Name="autoSaveMI" Header="Auto save on exit" IsCheckable="True" Unchecked="autoSaveMI_Unchecked" Checked="autoSaveMI_Checked"></MenuItem>
+			</MenuItem>
+		</Menu>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="5*"></RowDefinition>
+				<RowDefinition Height="25px"></RowDefinition>
+				<RowDefinition Height="*"></RowDefinition>
+				<RowDefinition Height="25px"></RowDefinition>
+				<RowDefinition Height="*"></RowDefinition>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
 
-		<Label Grid.Row="3" Grid.ColumnSpan="12" Content="Roll count" FontSize="12"></Label>
+			<ProgressBar Grid.Row="0" Grid.Column="0" Name="roll2sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="1" Name="roll3sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="2" Name="roll4sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="3" Name="roll5sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="4" Name="roll6sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="5" Name="roll7sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="6" Name="roll8sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="7" Name="roll9sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="8" Name="roll10sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="9" Name="roll11sPB"></ProgressBar>
+			<ProgressBar Grid.Row="0" Grid.Column="10" Name="roll12sPB"></ProgressBar>
 
-		<Label Grid.Row="4" Grid.Column="0" Name="roll2sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="1" Name="roll3sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="2" Name="roll4sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="3" Name="roll5sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="4" Name="roll6sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="5" Name="roll7sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="6" Name="roll8sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="7" Name="roll9sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="8" Name="roll10sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="9" Name="roll11sLbl" Content="0"></Label>
-		<Label Grid.Row="4" Grid.Column="10" Name="roll12sLbl" Content="0"></Label>
-	</Grid>
+			<Label Grid.Row="1" Grid.ColumnSpan="12" Content="Roll value" FontSize="12"></Label>
+
+			<Label Grid.Row="2" Grid.Column="0" Content="2" FontSize="19"></Label>
+			<Label Grid.Row="2" Grid.Column="1" Content="3" FontSize="22"></Label>
+			<Label Grid.Row="2" Grid.Column="2" Content="4" FontSize="25"></Label>
+			<Label Grid.Row="2" Grid.Column="3" Content="5" FontSize="28"></Label>
+			<Label Grid.Row="2" Grid.Column="4" Content="6" FontSize="28" Foreground="Red"></Label>
+			<Label Grid.Row="2" Grid.Column="5" Content="7" FontSize="28" Foreground="Orange"></Label>
+			<Label Grid.Row="2" Grid.Column="6" Content="8" FontSize="28" Foreground="Red"></Label>
+			<Label Grid.Row="2" Grid.Column="7" Content="9" FontSize="28"></Label>
+			<Label Grid.Row="2" Grid.Column="8" Content="10" FontSize="25"></Label>
+			<Label Grid.Row="2" Grid.Column="9" Content="11" FontSize="22"></Label>
+			<Label Grid.Row="2" Grid.Column="10" Content="12" FontSize="19"></Label>
+
+			<Label Grid.Row="3" Grid.ColumnSpan="12" Content="Roll count" FontSize="12"></Label>
+
+			<Label Grid.Row="4" Grid.Column="0" Name="roll2sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="1" Name="roll3sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="2" Name="roll4sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="3" Name="roll5sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="4" Name="roll6sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="5" Name="roll7sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="6" Name="roll8sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="7" Name="roll9sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="8" Name="roll10sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="9" Name="roll11sLbl" Content="0"></Label>
+			<Label Grid.Row="4" Grid.Column="10" Name="roll12sLbl" Content="0"></Label>
+		</Grid>
+	</DockPanel>
 </Window>

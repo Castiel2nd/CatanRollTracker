@@ -4,26 +4,22 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
-namespace CatanRollTracker
+namespace CatanRollTracker.Models
 {
-    public class IntegerProperty : INotifyPropertyChanged
-    {
-		private int _value;
-
-		public int Value
+    public class Settings : INotifyPropertyChanged
+	{
+		private bool _autoSaveOnExit = true;
+        public bool AutoSaveOnExit
 		{
-			get { return _value; }
+			get { return _autoSaveOnExit; }
 			set
 			{
-				_value = value;
-				OnPropertyChanged("Value");
+				//MessageBox.Show(value.ToString());
+				_autoSaveOnExit = value;
+				OnPropertyChanged("AutoSaveOnExit");
 			}
-		}
-
-		public IntegerProperty(int value)
-		{
-			_value=value;
 		}
 
 		protected virtual void OnPropertyChanged(string property)

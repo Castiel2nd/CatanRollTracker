@@ -1,8 +1,13 @@
-﻿using System;
+﻿using CatanRollTracker.Models;
+using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,142 +27,16 @@ namespace CatanRollTracker
 	public partial class MainWindow : Window
 	{
 		// Arrays are oversized on purpose for easier understanding
-		private IntegerProperty[] rolls = new IntegerProperty[13];
 		private ProgressBar[] progressBars = new ProgressBar[13];
 		private Label[] labels = new Label[13];
 
-		//Commands for keybindings
-		private ICommand rollCommand;
-
-		public ICommand Roll2Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						MessageBox.Show("command");
-						roll(2);
-					}));
-			}
-		}
-		public ICommand Roll3Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(3);
-					}));
-			}
-		}
-		public ICommand Roll4Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(4);
-					}));
-			}
-		}
-		public ICommand Roll5Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						MessageBox.Show("5");
-						roll(5);
-					}));
-			}
-		}
-		public ICommand Roll6Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(6);
-					}));
-			}
-		}
-		public ICommand Roll7Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(7);
-					}));
-			}
-		}
-		public ICommand Roll8Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(8);
-					}));
-			}
-		}
-		public ICommand Roll9Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(9);
-					}));
-			}
-		}
-		public ICommand Roll10Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(10);
-					}));
-			}
-		}
-		public ICommand Roll11Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(11);
-					}));
-			}
-		}
-		public ICommand Roll12Command
-		{
-			get
-			{
-				return rollCommand
-					?? (rollCommand = new ActionCommand(() =>
-					{
-						roll(12);
-					}));
-			}
-		}
-
 		public MainWindow()
 		{
-			for (int i = 0; i < rolls.Length; i++)
+			loadSettings();
+
+			for (int i = 0; i < App.rolls.Length; i++)
 			{
-				rolls[i] = new IntegerProperty(0);
+				App.rolls[i] = new IntegerProperty(0);
 			}
 
 			WindowState = WindowState.Maximized;
@@ -189,26 +68,51 @@ namespace CatanRollTracker
 			labels[12] = roll12sLbl;
 
 			// Bindings
-			
+
 			for(int i = 2; i < 13; i++)
 			{
 				Binding lblBinding = new Binding("Value");
-				lblBinding.Source = rolls[i];
+				lblBinding.Source = App.rolls[i];
 				labels[i].SetBinding(Label.ContentProperty, lblBinding);
 				progressBars[i].SetBinding(ProgressBar.ValueProperty, lblBinding);
 			}
-			//roll2sPB.SetBinding();
+
+			// Keyboard event handling
+
+			KeyDown += MainWindow_KeyDown;
+		}
+
+		private async void loadSettings()
+		{
+			if (!File.Exists(App.settingsFileName))
+			{
+				App.settings = new Settings();
+				serializeObject(App.settingsFileName, App.settings);
+			}else
+			{
+				App.settings = await deserializeObject<Settings>(App.settingsFileName);
+			}
+			bindSettings();
+		}
+		
+		private void bindSettings()
+		{
+			autoSaveMI.IsChecked = App.settings.AutoSaveOnExit;
+			//Binding autoSaveMIBinding = new Binding("AutoSaveOnExit");
+			//autoSaveMIBinding.Mode = BindingMode.TwoWay;
+			//autoSaveMIBinding.Source = App.settings;
+			//autoSaveMI.SetBinding(MenuItem.IsCheckedProperty, autoSaveMIBinding);
 		}
 
 		private int getMaxRollCount()
 		{
 			int maxRollCount = 0;
 
-			for(int i = 2; i < rolls.Length; i++)
+			for(int i = 2; i < App.rolls.Length; i++)
 			{
-				if (rolls[i].Value > maxRollCount)
+				if (App.rolls[i].Value > maxRollCount)
 				{
-					maxRollCount = rolls[i].Value;
+					maxRollCount = App.rolls[i].Value;
 				}
 			}
 
@@ -217,7 +121,7 @@ namespace CatanRollTracker
 
 		private void setPBMaximums(int max)
 		{
-			for (int i = 2; i < rolls.Length; i++)
+			for (int i = 2; i < App.rolls.Length; i++)
 			{
 				progressBars[i].Maximum = max;
 			}
@@ -225,13 +129,138 @@ namespace CatanRollTracker
 
 		private void roll(int roll)
 		{
-			MessageBox.Show(roll.ToString());
-			int expectedRollCount = rolls[roll].Value + 1;
+			//MessageBox.Show(roll.ToString());
+			int expectedRollCount = App.rolls[roll].Value + 1;
 			if(expectedRollCount > getMaxRollCount())
 			{
 				setPBMaximums(expectedRollCount);
 			}
-			rolls[roll].Value = roll;
+			App.rolls[roll].Value++;
+		}
+
+		public static void showError(string message)
+		{
+			MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+
+		private static async void serializeObject(string pathWithFileName, object result)
+		{
+			try
+			{
+				App.serializeObjectCore(pathWithFileName, result);
+			}catch(Exception ex)
+			{
+				showError(ex.Message);
+			}
+		}
+
+		private static async Task<T> deserializeObject<T>(string path)
+		{
+			try
+			{
+				using FileStream openStream = File.OpenRead(path);
+				T? obj =
+					await JsonSerializer.DeserializeAsync<T>(openStream);
+				return obj;
+			}
+			catch (Exception ex)
+			{
+				showError(ex.Message);
+			}
+			return default(T);
+		}
+
+		private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+		{
+			//MessageBox.Show(e.Key.ToString());
+			switch(e.Key)
+			{
+				case Key.D2:
+				case Key.NumPad2:
+					roll(2);
+					return;
+				case Key.D3:
+				case Key.NumPad3:
+					roll(3);
+					return;
+				case Key.D4:
+				case Key.NumPad4:
+					roll(4);
+					return;
+				case Key.D5:
+				case Key.NumPad5:
+					roll(5);
+					return;
+				case Key.D6:
+				case Key.NumPad6:
+					roll(6);
+					return;
+				case Key.D7:
+				case Key.NumPad7:
+					roll(7);
+					return;
+				case Key.D8:
+				case Key.NumPad8:
+					roll(8);
+					return;
+				case Key.D9:
+				case Key.NumPad9:
+					roll(9);
+					return;
+				case Key.Oem3:
+				case Key.Divide:
+					roll(10);
+					return;
+				case Key.OemQuestion:
+				case Key.Multiply:
+					roll(11);
+					return;
+				case Key.OemPlus:
+				case Key.Subtract:
+					roll(12);
+					return;
+			}
+		}
+
+		private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
+		{
+			if (!Directory.Exists(App.resultsDir))
+			{
+				try
+				{
+					Directory.CreateDirectory(App.resultsDir);
+				}catch (Exception ex)
+				{
+					showError(ex.Message);
+				}
+			}
+			serializeObject(App.resultsDir + App.pathSeparator + App.getDefaultFileName(), App.createResult());
+		}
+
+		private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e)
+		{
+			SaveFileDialog saveFileDialog = new SaveFileDialog();
+			saveFileDialog.FileName = App.getDefaultFileName();
+			if(saveFileDialog.ShowDialog() == true)
+			{
+				serializeObject(saveFileDialog.FileName, App.createResult());
+			}
+		}
+
+		private void autoSaveMI_Checked(object sender, RoutedEventArgs e)
+		{
+			if(App.settings != null)
+			{
+				App.settings.AutoSaveOnExit = true;
+			}
+		}
+
+		private void autoSaveMI_Unchecked(object sender, RoutedEventArgs e)
+		{
+			if (App.settings != null)
+			{
+				App.settings.AutoSaveOnExit = false;
+			}
 		}
 	}
 }
